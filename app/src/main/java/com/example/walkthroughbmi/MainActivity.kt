@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,17 +14,29 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.walkthroughbmi.ui.theme.WalkthroughBMITheme
+import androidx.compose.foundation.layout.Column as Column
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BmiApp()
+            WalkthroughBMITheme {
+                BmiApp()
+            }
         }
     }
 }
@@ -34,7 +47,13 @@ fun BmiApp() {
     var weightInput by remember { mutableStateOf("") }
     var bmi by remember { mutableStateOf(0f) }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text(
             text = "BMI Calculator",
             fontSize = 24.sp,
@@ -52,7 +71,8 @@ fun BmiApp() {
                 }
             },
             label = { Text("Height (m)") },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
         )
 
         OutlinedTextField(
@@ -64,7 +84,8 @@ fun BmiApp() {
                 }
             },
             label = { Text("Weight (kg)") },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
         )
 
         Text(
@@ -77,7 +98,7 @@ fun BmiApp() {
 
 fun calculateBmi(height: String, weight: String): Float? {
     val heightValue = height.toFloatOrNull()
-    val weightValue = weight.toIntOrNull()
+    val weightValue = weight.toFloatOrNull()
 
     if (heightValue != null && weightValue != null && heightValue > 0) {
         return weightValue / (heightValue * heightValue)
@@ -88,5 +109,7 @@ fun calculateBmi(height: String, weight: String): Float? {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    BmiApp()
+    WalkthroughBMITheme {
+        BmiApp()
+    }
 }
